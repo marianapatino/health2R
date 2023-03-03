@@ -1,0 +1,14 @@
+---
+title: "Import Apple Health Data"
+description: >
+  Account lists
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Import Apple Health Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## xxxx
+
+xxxx

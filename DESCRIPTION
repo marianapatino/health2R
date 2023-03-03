@@ -1,0 +1,29 @@
+Package: health2R
+Title: xxx
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Mariana",
+           family = "Patino",
+           role = c("aut", "cre"),
+           email = "mariana.patino@hotmail.com")
+Description: tbc
+Encoding: UTF-8
+LazyData: true
+License: GNU General Public License v3.0
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends:
+    R (>= 4.0)
+Imports:
+    dplyr,
+    tidyr,
+    ggplot2,
+    lubridate,
+    grid,
+    ggsvg,
+    magrittr
+Suggests:
+    knitr,
+    devtools,
+    roxygen2,
+    testthat
