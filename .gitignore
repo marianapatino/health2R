@@ -40,6 +40,10 @@
 
 #inst/helper
 
-#dev/*
-#dev/
+dev/*
+dev/
+/dev/*
+/dev/
+
+
 #docs
