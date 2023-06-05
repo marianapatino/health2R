@@ -21,7 +21,9 @@ Imports:
     lubridate,
     grid,
     ggsvg,
-    magrittr
+    magrittr,
+    xml2,
+    readr
 Suggests:
     knitr,
     devtools,
