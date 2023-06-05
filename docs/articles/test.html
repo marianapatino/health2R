@@ -80,9 +80,93 @@
     
     
 <div class="section level2">
-<h2 id="xxxx">xxxx<a class="anchor" aria-label="anchor" href="#xxxx"></a>
+<h2 id="parsing">Parsing<a class="anchor" aria-label="anchor" href="#parsing"></a>
 </h2>
-<p>xxxx</p>
+<p>Initial Parsing of Health Data File (Takes some time). This needs to
+be done only once per data pull. The parsed data can then be saved as in
+the .rds format</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">health2R</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.4</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.0</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 3.4.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.2.1</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.0</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.1     </span></span>
+<span><span class="co">## ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span><span class="co">## <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
+<span><span class="co">## <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Use the conflicted package (<span style="color: #0000BB; font-style: italic;">&lt;http://conflicted.r-lib.org/&gt;</span>) to force all conflicts to become errors</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">parsed_data</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="../reference/parse_healthdata.html">parse_healthdata</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"../dev/data/mp_export.zip"</span>,</span>
+<span>                   type <span class="op">=</span> <span class="st">"apple"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">parsed_data</span>,<span class="st">"../dev/data/parsed_healthdata_mp.rds"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="exploring">Exploring<a class="anchor" aria-label="anchor" href="#exploring"></a>
+</h2>
+<p>Note: remove “../” when in VS code, use ../ when in RStudio</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">parsed_data</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"../dev/data/parsed_healthdata_mp.rds"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">parsed_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 25 × 9</span></span></span>
+<span><span class="co">##    type                sourceName sourceVersion unit  device startDate          </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> HKQuantityTypeIden… Health     14.7.1        cm    <span style="color: #BB0000;">NA</span>     2021-09-08 <span style="color: #949494;">05:10:14</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> HKQuantityTypeIden… Health     14.7.1        kg    <span style="color: #BB0000;">NA</span>     2021-09-08 <span style="color: #949494;">05:10:14</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">05:55:33</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">05:56:57</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">05:53:48</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">05:58:41</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">06:05:40</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">06:10:28</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">06:15:14</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> HKQuantityTypeIden… Mariana ’… 8.1           coun… &lt;&lt;HKD… 2022-03-28 <span style="color: #949494;">06:16:58</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 15 more rows</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 3 more variables: endDate &lt;dttm&gt;, creationDate &lt;dttm&gt;, value &lt;chr&gt;</span></span></span></code></pre>
+<p>Print 10 most frequent types</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">parsed_data</span><span class="op">$</span><span class="va">type</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span>decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## .</span></span>
+<span><span class="co">##             HKQuantityTypeIdentifierActiveEnergyBurned </span></span>
+<span><span class="co">##                                                 476266 </span></span>
+<span><span class="co">##                      HKQuantityTypeIdentifierHeartRate </span></span>
+<span><span class="co">##                                                 237695 </span></span>
+<span><span class="co">##              HKQuantityTypeIdentifierBasalEnergyBurned </span></span>
+<span><span class="co">##                                                 231544 </span></span>
+<span><span class="co">##         HKQuantityTypeIdentifierDistanceWalkingRunning </span></span>
+<span><span class="co">##                                                 110307 </span></span>
+<span><span class="co">##                HKQuantityTypeIdentifierDistanceCycling </span></span>
+<span><span class="co">##                                                  75746 </span></span>
+<span><span class="co">##                      HKQuantityTypeIdentifierStepCount </span></span>
+<span><span class="co">##                                                  47434 </span></span>
+<span><span class="co">##                   HKQuantityTypeIdentifierWalkingSpeed </span></span>
+<span><span class="co">##                                                  20060 </span></span>
+<span><span class="co">##              HKQuantityTypeIdentifierWalkingStepLength </span></span>
+<span><span class="co">##                                                  20059 </span></span>
+<span><span class="co">##                HKQuantityTypeIdentifierRespiratoryRate </span></span>
+<span><span class="co">##                                                  19300 </span></span>
+<span><span class="co">## HKQuantityTypeIdentifierWalkingDoubleSupportPercentage </span></span>
+<span><span class="co">##                                                  17716</span></span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># df filter where type == "HKQuantityTypeIdentifierHeartRate"</span></span>
+<span><span class="va">heart</span> <span class="op">&lt;-</span> <span class="va">parsed_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"HKQuantityTypeIdentifierHeartRate"</span><span class="op">)</span></span>
+<span><span class="va">heart</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">heart</span><span class="op">$</span><span class="va">value</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">heart</span>, </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">startDate</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="co"># zoom in only 20th of march 2022</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_date.html" class="external-link">scale_x_datetime</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2022-03-29 00:00:00"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2022-03-29 23:59:59"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: Removed 237309 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<p><img src="test_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
   </div>
 

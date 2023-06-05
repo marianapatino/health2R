@@ -20,10 +20,10 @@ Imports:
     ggplot2,
     lubridate,
     grid,
-    ggsvg,
     magrittr,
     xml2,
-    readr
+    readr,
+    progressr
 Suggests:
     knitr,
     devtools,

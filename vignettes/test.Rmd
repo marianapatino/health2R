@@ -13,18 +13,24 @@ vignette: >
 
 Initial Parsing of Health Data File (Takes some time). This needs to be done only once per data pull. The parsed data can then be saved as in the .rds format
 
-```{r,eval = F}
+```{r}
 library(health2R)
 library(tidyverse)
+```
+
+
+```{r,eval = F}
 
 parsed_data <- 
-  parse_healthdata(filename = "../dev/data/mp_health.zip",
+  parse_healthdata(filename = "../dev/data/mp_export.zip",
                    type = "apple")
 
 saveRDS(parsed_data,"../dev/data/parsed_healthdata_mp.rds")
 ```
 
 ## Exploring
+
+Note: remove "../" when in VS code, use ../ when in RStudio
 
 ```{r}
 parsed_data <- 
@@ -36,8 +42,10 @@ parsed_data %>%
   head(25)
 ```
 
+Print 10 most frequent types
+
 ```{r}
-parsed_data$type %>% table()
+parsed_data$type %>% table() %>% sort(decreasing = TRUE) %>% head(10)
 ```
 
 ```{r}
@@ -53,6 +61,6 @@ library(ggplot2)
 ggplot(heart, 
     aes(x = startDate, y = value)) + geom_point() +
     # zoom in only 20th of march 2022
-    scale_x_datetime(limits = c(as.POSIXct("2022-03-20 00:00:00"), as.POSIXct("2022-03-20 23:59:59")))
+    scale_x_datetime(limits = c(as.POSIXct("2022-03-29 00:00:00"), as.POSIXct("2022-03-29 23:59:59")))
 ```
 
