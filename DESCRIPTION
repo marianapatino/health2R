@@ -1,6 +1,6 @@
 Package: health2R
-Title: What it does
-Version: 0.0.0.9000
+Title: Import, Parse, and Analyse Health/Wearables Data in R
+Version: 1.0
 Authors@R: 
     person(given = "Mariana",
            family = "Patino",
@@ -29,3 +29,4 @@ Suggests:
     devtools,
     roxygen2,
     testthat
+URL: https://github.com/marianapatino/health2R/
