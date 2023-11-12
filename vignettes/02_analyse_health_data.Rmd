@@ -1,0 +1,162 @@
+---
+title: "2. Analyse Health Data"
+description: >
+  Account lists
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{2. Analyse Health Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r,include = F,warning = F,message = F}
+set.seed(2903)
+library(tidyverse)
+base_path <- ".."
+parsed_healthdata <- 
+  readRDS(file.path(base_path,
+                    "dev/data/parsed_healthdata_mp.rds")) %>%
+  mutate(sourceName = sourceName %>% str_replace_all("Mariana","XXX")) %>%
+  select(-sourceVersion,-device,-creationDate)
+
+```
+
+## Analysing Health Data
+
+```{r,message = F,warning = F}
+library(health2R)
+library(tidyverse)
+library(lubridate)
+library(purrr)
+```
+```{r,eval = F}
+parsed_healthdata <- read_rds("path/to/your/health_data.rds")
+```
+
+The raw `xml` file exported by Apple contains several dozens of variables, which are all exported as rows in a single file. 
+
+```{r}
+parsed_healthdata$type %>% table() %>% sort(decreasing = TRUE) %>% head(10)
+```
+
+To better make sense and structure the data, this package proposes a number of domain-specific functions to analyse a specific health feature, such as cardiovascular data. 
+
+### Analyse Heart Rate Data
+
+The dedicated function for extracting and analysing cardiovascular data is called `get_cardio` and takes as input an already parsed healthdata object, or the raw zip file. Furthermore, the variable `var` allows the user to pick which cardio-related variable should be extracted, and currently takes as options `heartrate`, `resting`, `walkingAverage`, `workout`, `variability`, and `recovery`.
+
+```{r,eval = T}
+hr_data <- get_cardio(health_db = parsed_healthdata, 
+                          var = "heartrate")
+hr_data %>% select(type,sourceName,unit,startDate,value) %>% head()
+```
+
+```{r,warning = F}
+library(ggplot2)
+
+ggplot(hr_data, 
+       aes(x = startDate, y = value)) + 
+    geom_text(aes(label = "\u2665"), color = "red", size = 3) +
+    scale_x_datetime(limits = c(as.POSIXct("2022-03-29 00:00:00"),
+                                as.POSIXct("2022-03-29 23:59:59")))
+```
+
+### Analyse VO2-Max
+
+Furthermore, the `get_vo2max` function obtains and the VO2-Max performance data, either for the full available time range (default), of for a specific `start_date` and `end_date`. 
+
+```{r,eval = T}
+vo2max_data <- get_vo2max(health_db = parsed_healthdata,
+                          start_date = as_date("2023-01-01"), 
+                          end_date = as_date("2023-11-01"))
+```
+
+We can now VO2-Max (with differential noise added for privacy reasons):
+```{r,include = F}
+set.seed(2903)
+```
+
+```{r}
+private_vo2 <- 
+  vo2max_data %>% 
+  mutate(value = value + rnorm(1,0,10)) 
+private_vo2 %>% head()
+```
+
+Plot and smoothed trend overtime: 
+
+```{r}
+ggplot(private_vo2, 
+       aes(x = startDate, 
+           y = value)) + 
+  geom_point() +
+  scale_x_datetime(limits = c(as.POSIXct("2023-01-29 00:00:00"),
+                                as.POSIXct("2023-10-01 00:00:00")),
+                     date_breaks = "1 month",
+                     date_labels = "%b %y") + 
+  geom_smooth() + 
+  theme_bw() + 
+  theme(axis.text.y = element_blank()) + 
+  labs(x = NULL, y = NULL,
+       title = "VO2-Max over time (2023)",
+       subtitle = "White noise added for additional privacy")
+```
+
+### Analyse Menstrual Cycle
+
+```{r}
+menstruation_cycle_data <- get_menstruation_cycle(health_db = parsed_healthdata)
+```
+
+Of course, female menstrual cycles are a sensitive piece of data, which would not be appropriate to be exposed in this online documentation. Instead of plotting someone's actual cycle data, we therefore simulate random data in a similar format as they would be exported by the `get_menstruation_cycle` function of the package. 
+
+```{r}
+set.seed(12345) # for reproducibility
+
+# Function to simulate a single cycle
+simulate_cycle <- function(start_date) {
+  cycle_length <- sample(25:35, 1) # Random cycle length between 25 and 35 days
+  menstruation_length <- sample(3:6, 1) # Random menstruation length between 3 and 7 days
+  data.frame(
+    Date = seq.Date(start_date, by = "day", length.out = cycle_length),
+    Menstruation = c(rep(TRUE, menstruation_length), rep(FALSE, cycle_length - menstruation_length))
+  )
+}
+
+# Simulate cycles for a year
+simulate_year_cycles <- function(start_date, end_date) {
+  current_date <- start_date
+  all_cycles <- data.frame(Date = as.Date(character()), Menstruation = logical())
+  
+  while(current_date < end_date) {
+    cycle <- simulate_cycle(current_date)
+    all_cycles <- bind_rows(all_cycles, cycle)
+    current_date <- max(cycle$Date) + 1
+  }
+  all_cycles %>% filter(Date <= end_date)
+}
+
+# Use the function to simulate cycles between two dates
+start_date <- as.Date("2024-01-01")
+end_date <- as.Date("2024-12-31")
+simulated_menstrual_data <- simulate_year_cycles(start_date, end_date)
+
+# Viewing the first 10 rows
+simulated_menstrual_data %>% slice(25:35)
+```
+
+```{r}
+simulated_menstrual_data %>%
+  mutate(Month = floor_date(Date, "month"), 
+         Day = day(Date)) %>%  
+  ggplot(aes(x = Day,  y = 1,fill = Menstruation)) + 
+  geom_tile(color = "white") + # Use tiles
+  scale_fill_manual(values = c("TRUE" = "red", "FALSE" = "grey")) + 
+ facet_wrap(~Month, scales = "free_y", 
+             labeller = labeller(Month = function(x) format(as.Date(as.character(x), "%Y-%m-%d"), "%b %Y"))) +  # Custom labels
+  labs(fill = "Menstruation", x = "Day of the Month", y = "") + 
+  theme(axis.text.y = element_blank(), 
+        strip.text.y = element_text(angle = 0)) 
+
+```
+

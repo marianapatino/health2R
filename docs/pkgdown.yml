@@ -1,7 +1,10 @@
-pandoc: 3.1.2
-pkgdown: 2.0.7
+pandoc: '2.18'
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
-  test: test.html
-last_built: 2023-05-07T15:58Z
+  01_import_apple_data: 01_import_apple_data.html
+  02_analyse_health_data: 02_analyse_health_data.html
+  03_differential_privacy: 03_differential_privacy.html
+  04_analyse_workout_data: 04_analyse_workout_data.html
+last_built: 2023-11-12T15:50Z
 

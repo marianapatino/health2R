@@ -4,6 +4,33 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>/articles/01_import_apple_data.html</loc>
+  </url>
+  <url>
+    <loc>/articles/02_analyse_health_data.html</loc>
+  </url>
+  <url>
+    <loc>/articles/03_differential_privacy.html</loc>
+  </url>
+  <url>
+    <loc>/articles/04_analyse_workout_data.html</loc>
+  </url>
+  <url>
+    <loc>/articles/analyse_health_data.html</loc>
+  </url>
+  <url>
+    <loc>/articles/analyse_workout_data.html</loc>
+  </url>
+  <url>
+    <loc>/articles/differential_privacy.html</loc>
+  </url>
+  <url>
+    <loc>/articles/import_apple_data.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -16,10 +43,34 @@
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>/reference/add_differential_privacy.html</loc>
+  </url>
+  <url>
+    <loc>/reference/add_privacy_to_timestamps.html</loc>
+  </url>
+  <url>
+    <loc>/reference/add_privacy_to_timestamps_autotype.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_cardio.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_menstruation_cycle.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_vo2max.html</loc>
+  </url>
+  <url>
+    <loc>/reference/import_healthdata.html</loc>
+  </url>
+  <url>
+    <loc>/reference/import_workouts.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/parse_gpx.html</loc>
   </url>
   <url>
     <loc>/reference/parse_healthdata.html</loc>
